@@ -11,15 +11,21 @@ import tqdm
 import matplotlib.pyplot as plt
 import torch.nn.functional as F
 
+def print_graph_2(loss, epoch, label):
+    plt.plot(epoch, loss)
+    plt.title(label)
+    plt.show()
+
 ######### PARAMETERS ##########
 valid_size = 0.3
 test_size  = 0.1
 batch_size = 10
-epochs = 35
+epochs = 30
 cuda = True
 input_shape = (224, 224)
 n_classes = 2
 ###############################
+
 
 ######### DIRECTORIES #########
 SRC_DIR = os.getcwd()
@@ -27,6 +33,8 @@ ROOT_DIR = os.path.join(SRC_DIR, '..')
 DATA_DIR = os.path.join(ROOT_DIR, 'data')
 IMAGE_DIR = os.path.join(DATA_DIR, 'images')
 MASK_DIR = os.path.join(DATA_DIR, 'masks')
+AUG_IMAGE = os.path.join(DATA_DIR, 'aug_images')
+AUG_MASK = os.path.join(DATA_DIR, 'aug_masks')
 ###############################
 
 # PREPARE IMAGE AND MASK LISTS
@@ -35,6 +43,9 @@ image_path_list.sort()
 
 mask_path_list = glob.glob(os.path.join(MASK_DIR, '*'))
 mask_path_list.sort()
+
+aug_image_path_list = glob.glob(os.path.join(AUG_IMAGE, '*'))
+aug_mask_path_list  = glob.glob(os.path.join(AUG_MASK,  '*'))
 
 # DATA CHECK
 image_mask_check(image_path_list, mask_path_list)
@@ -56,23 +67,30 @@ valid_label_path_list = mask_path_list[test_ind:valid_ind]
 
 # SLICE TRAIN DATASET FROM THE WHOLE DATASET
 train_input_path_list = image_path_list[valid_ind:]
-train_label_path_list = mask_path_list[valid_ind:]
+train_label_path_list = mask_path_list[valid_ind:] 
 
+# SLICE AUGMENTATION DATASET TO ADD TRAIN DATASET
+"""
+aug_half = int(len(aug_image_path_list) / 2)
+train_input_path_list = aug_image_path_list[:aug_half] + train_input_path_list[:] + aug_image_path_list[aug_half:]
+train_label_path_list = aug_mask_path_list[:aug_half] + train_label_path_list[:] + aug_mask_path_list[aug_half:]
+"""
 # DEFINE STEPS PER EPOCH
 steps_per_epoch = len(train_input_path_list)//batch_size
 
 # CALL MODEL
-model = UNet(input_size=input_shape, n_classes=2)
-#model = torch.load(r"C:\Users\Yusuf\Desktop\Models\05.08.21(1).pth")
+#model = UNet(input_size=input_shape, n_classes=2)
+model = torch.load(r"C:\Users\Yusuf\Desktop\Models\09.08.21(2).pth")
 
 # DEFINE LOSS FUNCTION AND OPTIMIZER
 criterion = nn.BCELoss()
-optimizer = optim.SGD(model.parameters(), lr=0.001, momentum = 0.9)
+optimizer = optim.SGD(model.parameters(), lr=0.004, momentum = 0.9, nesterov=True)
+scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min')
 
 # IF CUDA IS USED, IMPORT THE MODEL INTO CUDA
 if cuda:
     model = model.cuda()
-
+    criterion = criterion.cuda()
 
 # TRAINING THE NEURAL NETWORK
 vall_loss = np.zeros((epochs))
@@ -81,6 +99,8 @@ epoch_np = np.zeros((epochs))
 for epoch in range(epochs):
     epoch_np[epoch] = epoch
     print()
+    loss_value_graph = np.zeros((steps_per_epoch))
+    epoch_value_graph = np.zeros((steps_per_epoch))
     running_loss = 0
     for ind in tqdm.tqdm(range(steps_per_epoch)):
         batch_input_path_list = train_input_path_list[batch_size*ind:batch_size*(ind+1)]
@@ -94,8 +114,11 @@ for epoch in range(epochs):
         
         loss = criterion(outputs, batch_label)
         loss.backward()
+        
         optimizer.step()
-
+        
+        loss_value_graph[ind] = loss.item();
+        epoch_value_graph[ind] = ind;
         running_loss += loss.item()
         if ind == steps_per_epoch-1:
             train_loss[epoch] = running_loss
@@ -107,11 +130,18 @@ for epoch in range(epochs):
                 outputs = model(batch_input)
                 loss = criterion(outputs, batch_label)
                 val_loss += loss
+                """
+                if running_loss <= 8:
+                    optimizer.param_groups[0]['lr'] = 0.001
+                """
                 
                 break
 
             print('validation loss on epoch {}: {}'.format(epoch, val_loss))
             vall_loss[epoch] = val_loss
+    print_graph_2(loss_value_graph, epoch_value_graph, 'Epoch number {}'.format(epoch))
+    scheduler.step(running_loss)
+            
 def print_graph(train_loss, vall_loss, epoch):
     
     plt.plot(epoch, train_loss, color = "red", label = "Train")
@@ -125,12 +155,15 @@ def print_graph(train_loss, vall_loss, epoch):
 print_graph(train_loss, vall_loss, epoch_np)
 
 
+
+
 def show(image):
     cv2.imshow("image", image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-torch.save(model, 'C:\\Users\\Yusuf\\.spyder-py3\\SadiEvrenSeker\\Intership 1\\model.pth')
+
+torch.save(model, 'C:\\Users\\Yusuf\\Desktop\\Models\\09.08.21(3).pth')
 print("###############################\n" + "Model Saved!\n"+ "##############################\n")
 #best_model = torch.load(r'C:\Users\Yusuf\.spyder-py3\SadiEvrenSeker\Intership 1\model.pth')
 #best_model.eval()
