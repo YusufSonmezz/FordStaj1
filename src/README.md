@@ -1,3 +1,4 @@
+# To reach best model, click this link: https://doc-00-18-docs.googleusercontent.com/docs/securesc/57tvnt779egskg0a0mn9ml8vv31skgd4/imgacde0cl5egdvku27l88emaggargv5/1632419700000/15275129828628326715/15275129828628326715/1j6gDIdY5YVhuOSW6CkTKVt37x2paD2Z1?e=download&authuser=0
 # Freespace Segmentation with Fully Convolutional Neural Network (FCNN)
 
 ## Build
