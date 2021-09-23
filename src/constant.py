@@ -29,3 +29,13 @@ WIDTH = 224
 
 # Number of class, for this task it is 2: Non-drivable area and Driviable area
 N_CLASS= 2
+
+# Path to augmentation images
+AUG_IMAGE = '../data/aug_images'
+if not os.path.exists(AUG_IMAGE):
+    os.mkdir(AUG_IMAGE)
+
+# Path to augmentation images
+AUG_MASK = '../data/aug_masks'
+if not os.path.exists(AUG_MASK):
+    os.mkdir(AUG_MASK)
