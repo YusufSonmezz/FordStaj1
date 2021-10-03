@@ -36,5 +36,5 @@ Overview to Code:
 **In the code**, 
 - Exterior points are read from JSON file
 - With `fillPolly` function from OpenCV, inside of these points paint with a color that is given
-- Lastly, The new mask image is written the given direction with `imwrite` function
+- Lastly, The new mask image is written to given direction with `imwrite` function
 
