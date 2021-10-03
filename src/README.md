@@ -1,5 +1,5 @@
 ## Summary Of Project
-This project aims detection of freespace in highway. In this project, datas which are limited has been processed and augmented, the UNet model has been used and with [train.py](https://github.com/YusufSonmezz/FordStaj1/blob/main/src/train.py) the model fitted.
+This project aims detection of freespace in highway. In this project, datas which are limited has been processed and augmented, the UNet model has been used and with [train.py](https://github.com/YusufSonmezz/FordStaj1/blob/main/src/train.py), the model has been fitted.
 
 ## Content Of Project
 * Convertion of Json files to Mask Images     : [json2mask.py](https://github.com/YusufSonmezz/FordStaj1/blob/main/src/json2mask.py)
