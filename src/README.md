@@ -28,7 +28,7 @@ Overview to JSON File:
 <br>
 <img src = "https://github.com/YusufSonmezz/FordStaj1/blob/main/Intern%20Images/Ekran%20g%C3%B6r%C3%BCnt%C3%BCs%C3%BC%202021-10-03%20165648.png" width = "600" height = "400">
 <br>
-As you see above, Freespaces have exterior points. These points are used to detect which area on the image belongs to Freespace. <br>
+As you see above, Freespaces have exterior points. These points are used to detect which area on the image belongs to Freespace. <br> <br>
 Overview to Code:
 <br>
 <img src = "https://github.com/YusufSonmezz/FordStaj1/blob/main/Intern%20Images/jsontomask.png">
