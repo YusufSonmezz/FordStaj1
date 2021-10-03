@@ -3,8 +3,8 @@ This project aims detection of freespace in highway. In this project, datas whic
 
 ## Content Of Project
 * Convertion of Json files to Mask Images     : [json2mask.py](https://github.com/YusufSonmezz/FordStaj1/blob/main/src/json2mask.py)
-* Checking Masks With Placing Them on Images : [mask_on_images.py](https://github.com/YusufSonmezz/FordStaj1/blob/main/src/mask_on_image.py)
-* Preparing Datas to GPU supported Tensors : [preprocces.py](https://github.com/YusufSonmezz/FordStaj1/blob/main/src/preprocess.py)
+* Checking Masks With Placing Them on Images : [mask_on_image.py](https://github.com/YusufSonmezz/FordStaj1/blob/main/src/mask_on_image.py)
+* Preparing Datas to GPU supported Tensors : [preprocess.py](https://github.com/YusufSonmezz/FordStaj1/blob/main/src/preprocess.py)
 * Creating The Model : [model_unet.py](https://github.com/YusufSonmezz/FordStaj1/blob/main/src/model_unet.py)
 * Fitting The Model : [train.py](https://github.com/YusufSonmezz/FordStaj1/blob/main/src/train.py)
 * Checking If The Model is Overfitted With K-Fold Cross Validation : [trainCV.py](https://github.com/YusufSonmezz/FordStaj1/blob/main/src/trainCV.py)
